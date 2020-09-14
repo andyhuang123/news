@@ -1,0 +1,109 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: liuxiang
+ */
+namespace $repository_namespace;
+ 
+use $model_namespace;
+use $repository_interface_namespace\$repository_interface;
+ 
+class $class_name implements $repository_interface
+{
+    /**
+     * @var \$model_namespace
+     */
+    public $$model_var_name;
+ 
+    public function __construct($model_name $$model_var_name)
+    {
+        $this->$model_var_name = $$model_var_name;
+    }
+ 
+    /**
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function all($columns = array('*'))
+    {
+        return $this->$model_var_name->all($columns);
+    }
+ 
+    /**
+     * @param int $perPage
+     * @param array $columns
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate($perPage = 15, $columns = array('*'))
+    {
+        return $this->$model_var_name->paginate($perPage, $columns);
+    }
+ 
+    /**
+     * Create a new $model_var_name
+     * @param array $data
+     * @return \$model_namespace
+     */
+    public function create(array $data)
+    {
+        return $this->$model_var_name->create($data);
+    }
+ 
+     /**
+       * Update a $model_var_name
+       * @param array $data
+       * @param $id
+       * @return \$model_namespace
+       */
+    public function update($data = [], $id)
+    {
+        return $this->$model_var_name->whereId($id)->update($data);
+    }
+ 
+    /**
+     * Store a $model_var_name
+     * @param array $data
+     * @return \$model_namespace
+     */
+    public function store($data = [])
+    {
+        $this->$model_var_name->id = $data['id'];
+        //...
+        $this->$model_var_name->save();
+    }
+ 
+    /**
+     * Delete a $model_var_name
+     * @param array $data
+     * @param $id
+     * @return \$model_namespace
+     */
+    public function delete($data = [], $id)
+    {
+        $this->$model_var_name->whereId($id)->delete();
+    }
+ 
+    /**
+     * @param $id
+     * @param array $columns
+     * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function find($id, $columns = array('*'))
+    {
+        $$model_name = $this->$model_var_name->whereId($id)->get($columns);
+        return $$model_name;
+    }
+ 
+    /**
+     * @param $field
+     * @param $value
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function findBy($field, $value, $columns = array('*'))
+    {
+        $$model_name = $this->$model_var_name->where($field, '=', $value)->get($columns);
+        return $$model_name;
+    }
+ 
+ }
