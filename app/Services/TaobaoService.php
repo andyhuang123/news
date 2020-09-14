@@ -18,7 +18,7 @@ class TaobaoService
     public function hotwuliao($page="1",$pagesize="10"){ 
         $c = new TopClient;
         $c->appkey = '31269612';
-        $c->secretKey='ff614c43bb9818dd8f877ea73319751d';
+        $c->secretKey='***********';
         $c->format= 'json';
         $req = new TbkDgOptimusMaterialRequest;
         $req->setPageSize($pagesize);
