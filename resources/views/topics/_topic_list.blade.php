@@ -4,7 +4,12 @@
       <li class="media">
         <div class="media-left">
           <a href="{{ route('users.show', [$topic->user_id]) }}">
-            <img class="media-object img-thumbnail mr-3" style="width: 52px; height: 52px;" src="{{ $topic->user->avatar }}" title="{{ $topic->user->name }}">
+            @if(!$topic->user->avatar)  
+            <img class="media-object img-thumbnail mr-3" style="width: 52px; height: 52px;" src="/img/avatar/avatar15.png" title="logo">
+            @else
+            <img class="media-object img-thumbnail mr-3" style="width: 52px; height: 52px;" src="{{ $topic->user->avatar }}" title="{{ $topic->user->username }}">
+            @endif
+            
           </a>
         </div>
 
@@ -27,9 +32,9 @@
             </a>
 
             <span> • </span>
-            <a class="text-secondary" href="{{ route('users.show', [$topic->user_id]) }}" title="{{ $topic->user->name }}">
+            <a class="text-secondary" href="#" title="{{ $topic->user->username }}">
               <i class="far fa-user"></i>
-              {{ $topic->user->name }}
+              {{ $topic->user->username }}
             </a>
             <span> • </span>
             <i class="far fa-clock"></i>

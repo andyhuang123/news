@@ -67,9 +67,9 @@
                     <label class="control-label" for="inputError" style="margin-left: 15px"><i class="fa fa-times-circle-o">{{$message}}</i></label></br>
                 @endforeach
             @endif
-            <input type="text" class="form-control" style="display: inline;width: 55%; margin-left: 15px" placeholder="{{ trans('admin.captcha') }}" name="captcha">
-            <span class="glyphicon glyphicon-refresh form-control-feedback captcha" style="right:39%;z-index: 100"></span>
-            <img class="captcha" src="{{ captcha_src('admin') }}">
+            <!--<input type="text" class="form-control" style="display: inline;width: 55%; margin-left: 15px" placeholder="{{ trans('admin.captcha') }}" name="captcha">-->
+            <!--<span class="glyphicon glyphicon-refresh form-control-feedback captcha" style="right:39%;z-index: 100"></span>-->
+            <!--<img class="captcha" src="{{ captcha_src('admin') }}">-->
         </div>
     </div>
     <!-- 在这里添加代码  end-->

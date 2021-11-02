@@ -101,14 +101,14 @@ return [
             ],
         
             'tokenizer' => [
+                
                 'driver' => env('TNTSEARCH_TOKENIZER', 'default'),
         
                 'jieba' => [
                     'dict' => 'small',
                     //'user_dict' => resource_path('dicts/mydict.txt'), //自定义词典路径
-                ],
-        
-                'analysis' => [
+                ], 
+                'phpanalysis' => [
                     'result_type' => 2,
                     'unit_word' => true,
                     'differ_max' => true,

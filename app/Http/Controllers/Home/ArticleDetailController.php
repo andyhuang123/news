@@ -9,13 +9,12 @@ use App\Models\Favorites;
 use App\Models\User;  
 use App\Models\BlogSubscribe;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Events\sendModel;
+use App\Http\Controllers\Controller; 
 use App\Events\OrderEvent; 
-use Illuminate\Support\Facades\Event; 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;  
 use App\Services\TaobaoService;
-
+use Illuminate\Support\Facades\Cache;
+ 
 class ArticleDetailController extends Controller
 {
     
@@ -29,25 +28,32 @@ class ArticleDetailController extends Controller
         $articleModel   = new BlogNavArticle();
           
         $article_result = $articleModel::find($a_id); 
-        
         if(!$article_result){
             return view('error.404');
         }
-        
         //获取上一篇文章
         $previousPostID = $articleModel::where('article_show', 1)->where('nav_id', $article_result->nav_id)->where('id', '<', $a_id)->max('id');
         
-        $previousPostID = empty($previousPostID) ? $a_id : $previousPostID;
+        $previousPostID = empty($previousPostID) ? 0 : $previousPostID;
+
+        $pre_article = $articleModel::find($previousPostID);
+       
         
         //获取下一篇文章
         $nextPostID = $articleModel::where('article_show', 1)->where('nav_id', $article_result->nav_id)->where('id', '>', $a_id)->min('id');
         
-        $nextPostID = empty($nextPostID) ? $a_id : $nextPostID;
-        
+        $nextPostID = empty($nextPostID) ? 0 : $nextPostID;
+       
+        $next_article = $articleModel::find($nextPostID);
+         
         //获取本篇文章url
         $article_url = url()->current();
         //获取本篇文章所属留言
-        $article_message = BlogMessage::with('owner')->where('foreign_id', $a_id)->orderBy('id', 'desc')->paginate(6);
+        // $article_message = BlogMessage::with('owner')->where('foreign_id', $a_id)->orderBy('id', 'desc')->paginate(6);
+        $page = 1;
+        $article_message = Cache::remember('article_msg_list', 200, function () use($a_id,$page) {
+            return BlogMessage::with('owner')->where('foreign_id', $a_id)->orderBy('id', 'desc')->paginate(6);
+        });
          
         //获取留言的背景色
         $bg_arr = define_background();
@@ -72,13 +78,35 @@ class ArticleDetailController extends Controller
          }else{
              $is_favorit = false; 
          }
-         //推荐 ::inRandomOrder()
-         $recommend_article = $articleModel::where(['article_show'=> 1,'tag'=>'blog'])->orderBy(DB::raw('RAND()'))->take(5)->get();
-         //ads
-         $page = rand(1,15); 
-         $taobao = new TaobaoService;
-         $ads = $taobao->hotwuliao($page,$pagesiz="4");
-         return view('home.article_details.index', compact('article_result', 'article_url', 'badge_arr', 'previousPostID', 'nextPostID', 'article_message', 'bg_arr','is_favorit','recommend_article','ads'));
+         //相关推荐 ::inRandomOrder()
+         $keyword = $article_result->article_title;
+         $recommend_article = Cache::remember('search_article_list', 100, function () use($keyword) {
+            return BlogNavArticle::search($keyword)->take(6)->get(); 
+         });
+        //  $recommend_article = BlogNavArticle::search($keyword)->take(6)->get();  
+         //过滤该文章
+         $recommend_article = $recommend_article->filter(function ($value, $key) use($a_id) { 
+            return $value->id != $a_id;
+         }); 
+         $recommend_article->all();
+        //淘宝客
+        $page = rand(1,6);   
+        $me_arr = ['13375','13372','13369','13376','13375','13372','19810','13369'];
+        $me_id = $me_arr[rand(0,7)]; 
+        $tabo = new TaobaoService;   
+        $ads = Cache::remember('taobao_detail_article_'.$page.'_'.$me_id, 100, function () use($tabo,$page,$me_id) {
+            return $tabo->getwuliaomax($page,"10",$me_id); 
+        });
+        // $ads = $tabo->getwuliaomax($page,"10",$me_id);    
+        
+         if($this->isMobile()){
+        //跳转移动端页面
+           $ispc = false; 
+        }else{
+        //跳转PC端页面
+           $ispc = true; 
+        }
+        return view('home.article_details.index', compact('article_result', 'article_url', 'badge_arr', 'previousPostID', 'nextPostID', 'article_message', 'bg_arr','is_favorit','recommend_article','pre_article','next_article','ads','ispc'));
     }
 
     /**
@@ -263,5 +291,71 @@ class ArticleDetailController extends Controller
             return response()->json($result);
     }
     
+    public  function isMobile(){ 
+    // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+    if (isset ($_SERVER['HTTP_X_WAP_PROFILE']))
+    {
+        return true;
+    } 
+    // 如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+    if (isset ($_SERVER['HTTP_VIA']))
+    { 
+        // 找不到为flase,否则为true
+        return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
+    } 
+    // 脑残法，判断手机发送的客户端标志,兼容性有待提高
+    if (isset ($_SERVER['HTTP_USER_AGENT']))
+    {
+        $clientkeywords = array ('nokia',
+            'sony',
+            'ericsson',
+            'mot',
+            'samsung',
+            'htc',
+            'sgh',
+            'lg',
+            'sharp',
+            'sie-',
+            'philips',
+            'panasonic',
+            'alcatel',
+            'lenovo',
+            'iphone',
+            'ipod',
+            'blackberry',
+            'meizu',
+            'android',
+            'netfront',
+            'symbian',
+            'ucweb',
+            'windowsce',
+            'palm',
+            'operamini',
+            'operamobi',
+            'openwave',
+            'nexusone',
+            'cldc',
+            'midp',
+            'wap',
+            'mobile'
+            ); 
+        // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+        if (preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT'])))
+        {
+            return true;
+        } 
+    } 
+    // 协议法，因为有可能不准确，放到最后判断
+    if (isset ($_SERVER['HTTP_ACCEPT']))
+    { 
+        // 如果只支持wml并且不支持html那一定是移动设备
+        // 如果支持wml和html但是wml在html之前则是移动设备
+        if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html'))))
+        {
+            return true;
+        } 
+    } 
+    return false;
+  } 
 
 }

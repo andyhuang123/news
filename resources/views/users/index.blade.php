@@ -5,13 +5,7 @@
 
 @section('content')
  <div class="container pt-5">
-         <div class="title"> 
-            <!--<blockquote class="blockquote text-right">-->
-            <!--    <p class="mb-0"> </p>-->
-            <!--    <footer class="blockquote-footer"> -->
-            <!--        <cite title="Source Title"> </cite>-->
-            <!--    </footer>-->
-            <!--</blockquote>-->
+         <div class="title">  
         </div> 
         <div class="col-sm-3" style="max-width:100%">
              <div class="card card-profile">

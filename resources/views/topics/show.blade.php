@@ -10,13 +10,17 @@
       <div class="card ">
         <div class="card-body">
           <div class="text-center">
-            作者：{{ $topic->user->name }}
+            作者：{{ $topic->user->username }}
           </div>
           <hr>
           <div class="media">
             <div align="center">
-              <a href="{{ route('users.show', $topic->user->id) }}">
+              <a href="#"> 
+                @if(!$topic->user->avatar)  
+                <img class="thumbnail img-fluid" src="/img/avatar/avatar15.png" title="logo">
+                @else
                 <img class="thumbnail img-fluid" src="{{ $topic->user->avatar }}" width="300px" height="300px">
+                @endif
               </a>
             </div>
           </div>

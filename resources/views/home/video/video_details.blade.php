@@ -1,37 +1,131 @@
 @extends('home.main')
-@section('title','视频详情')
+
+@section('title',$video_result->video_title)
+
+@push('scripts')
+ <!-- Dplay 视频播放插件-->
+ <link rel="stylesheet" href="{{asset(__STATIC_HOME__)}}/assets/dplay/DPlayer.min.css"> 
+ <script src="{{asset(__STATIC_HOME__)}}/assets/dplay/DPlayer.min.js"></script> 
+ <style>
+ .pull-left {
+    float: left;
+}
+.pull-right {
+    float: right;
+}
+ </style>
+@endpush
+
 @section('content')
-    <!-- Dplay 视频播放插件-->
-    <link rel="stylesheet" href="{{asset(__STATIC_HOME__)}}/assets/dplay/DPlayer.min.css">
+   
     <div class="container pt-5">
         <div class="title"> 
+            <nav>
+                <ol class="breadcrumb"> 
+                    <li  class="breadcrumb-item active"><a href="/">首页</a></li>
+                    <li class="breadcrumb-item"><a href="/video/35">视频列表</a></li> 
+                </ol> 
+            </nav>
         </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="title">
-                    <h3>视频详情 </h3>
+                    <h3>{{$video_result->video_title}}</h3> 
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-9 mb-2">
                 <div id="dplayer"></div>
-            </div>
-            <div class="col-sm-3">
-                <h5>{{$video_result->video_title}}</h5>
-                <div class="col-sm-12 m-2">
-                    @php
-                        $tags = explode(',',$video_result->video_tag);
-                    @endphp
-                    @foreach($tags as $k => $tag)
-                        <label class="badge badge-pill badge-{{$badge_arr[$k]}}">{{$tag}}</label>
-                    @endforeach
-                </div>
-                <blockquote class="blockquote text-left">
-                    <p class="mb-0">{{$video_result->video_describe}}</p>
-                    <footer class="blockquote-footer text-right">{{date_conversion($video_result->created_at)}}</footer>
-                </blockquote>
+                
+                <div class="row">
+                       <div class="col-sm-12">
+                        <div class="row mt-3">
+                            <div class="col-sm-12">
+                                <a  @if($previousPostID==0) href="" @else href="{{url('video_details',['vid'=>$previousPostID])}}"  @endif >
+                                    <div class="pull-left">
+                                        <button class="btn btn-sm btn-success btn-round" type="button">
+                                            <i class="fa fa-angle-left"></i>
+                                             @if($previousPostID!=0) 
+                                                上一个视频 
+                                              @else
+                                                没有了
+                                              @endif
+                                        </button>
+                                    </div>
+                                </a>
+                                <a  @if($nextPostID==0) href="" @else href="{{url('video_details',['vid'=>$nextPostID])}}" @endif >
+                                    <div class="pull-right">
+                                        <button class="btn btn-sm btn-success btn-round" type="button">
+                                           @if($nextPostID!=0) 
+                                                下一个视频 
+                                            @else
+                                                没有了
+                                            @endif
+                                            <i class="fa fa-angle-right"></i>
+                                        </button>
+                                    </div>
+                                </a>
+                          </div>
+                       </div>  
+                     </div>
+                 </div> 
+                <div class="col-12">
+                      <div class="share-dialog-cont"> 
+                            <div class="share-platform">
+                                <div class="share-platform-l" style="width:auto;margin-top:14px">分享:</div>
+                                <div class="share-platform-r">
+                                    <div class="bdsharebuttonbox">
+                                        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                                        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                                        <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+                                        <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>  
+                </div>  
 
+                <div class="col-12">  
+                  <div style="text-align:center">
+                    <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger btn-lg" style="border-radius: 30px;">关注赞赏</button>
+                  </div>   
+                </div> 
+                
+            </div>
+            <div class="col-sm-3"> 
+                <div class="card">
+                   <div class="card-body"> 
+                        <h5>{{$video_result->video_title}}</h5>
+                        <div class="col-sm-12 m-2">
+                            @php
+                                $tags = explode(',',$video_result->video_tag);
+                            @endphp
+                            @foreach($tags as $k => $tag)
+                                <label class="badge badge-pill badge-{{$badge_arr[$k]}}">{{$tag}}</label>
+                            @endforeach
+                        </div>
+                        <blockquote class="blockquote text-left">
+                            <p class="mb-0">{{$video_result->video_describe}}</p>
+                            <footer class="blockquote-footer text-right">{{date_conversion($video_result->created_at)}}</footer>
+                        </blockquote>
+                   </div>
+                </div>
+                @if(count($xuanpin))
+                    @foreach ($xuanpin as $key=>$ad) 
+                    <div class="card">
+                        <a href="{{$ad->click_url}}" title="{{$ad->item_description}}" alt="{{$ad->title}}" target="_blank">
+                        <img class="card-img-top" src="{{$ad->pict_url}}" alt="{{$ad->item_description}}">
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text">
+                                {{$ad->item_description}}
+                            </p>
+                        </div>
+                    </div>
+                    @endforeach 
+                @endif      
+                
             </div>
         </div>
         <div class="row">
@@ -115,26 +209,60 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!--<input type="hidden" name="video_url" value="{{asset('storage/app/public/'.str_replace('_','/',$video_result->video_link))}}">-->
+    </div> 
     <input type="hidden" name="video_url" value="/aetherupload/display/{{$video_result->video_link}}">
-    
-    <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel">好的内容，值得关注</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-avatar border-white" style="text-align: center;">
+                       
+                            <img src="http://www.seedblog.cn/uploads/teng_ad/qrcode_for_gh_7a8bc85b3f32_258.jpg" alt="微信公众号" style="width:200px;height:200px">
+                         
+                            <img src="http://www.seedblog.cn/uploads/teng_ad/dashang.png" alt="打赏一下" style="width:230px;height:200px">
+                         
+                   </div> 
+                </div> 
+            </div>
+        </div>
+    </div>
+@endsection
+
+@push('backend-register-js')
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"分享到新浪微博","bdMini":"1","bdMiniList":["bdxc","tqf","douban","bdhome","sqq","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","fbook","twi","linkedin","h163","evernotecn","copy","print"],"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+ 
+<script> 
         $(function () {
-            dplay();
+            dplay(); 
         });
+
+        $('#myModal').on('hidden.bs.modal', function (e) {
+        // do something...
+        })
+
+        
         function dplay() {
             var video_url = $("input[name='video_url']").val();
+            var pic = '/uploads/'+"{{$video_result->video_img}}";
             const dp = new DPlayer({
                 container: document.getElementById('dplayer'),
+                lang:'zh-cn',
+                loop: true,
+                autoplay:false,
                 video: {
-                    url: video_url
+                    url: video_url,
+                    pic: pic
                 },
+                screenshot:true
+
             });
             //绑定播放事件
             dp.on('play', function() {
@@ -198,4 +326,4 @@
             $("#msg_record").html(msg_record);
         }
     </script>
-@endsection
+@endpush

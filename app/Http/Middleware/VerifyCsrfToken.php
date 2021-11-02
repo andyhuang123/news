@@ -21,5 +21,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'admin/blog-upload-files',
         'live2d_api/*',
+        'wechat'
     ];
 }

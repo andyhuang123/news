@@ -7,7 +7,8 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-
+use Illuminate\Support\Facades\DB;
+use Encore\Admin\Widgets\Box;
 class UserController extends AdminController
 {
     /**
@@ -25,15 +26,26 @@ class UserController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new User());
+        $grid->model()->orderBy('id','desc');
+        $grid->header(function ($query) {
 
-        $grid->column('id', __('Id'));
-        $grid->column('username', __('姓名'));
-        $grid->column('email', __('邮箱')); 
-        $grid->column('location', __('地址'));
-        $grid->column('lastloginip', __('最后登录ip')); 
-        $grid->column('lastlogintimename', __('最后登录时间'));
-        $grid->column('had_not_login_days', __('未登录天数'));
+            $gender = $query->select(DB::raw('count(mini_openid) as count, is_sub'))
+                ->groupBy('is_sub')->get()->pluck('count', 'is_sub')->toArray();
+            if(!isset($gender['1'])){
+                $gender['1'] =0;
+            }
+            $doughnut = view('admin.chart.sub', compact('gender'));
         
+            return new Box('订阅比例', $doughnut);
+        });
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('username', __('姓名'));
+        $grid->column('mini_openid', __('小程序openid'));
+        $grid->column('is_sub', __('是否订阅消息'))->display(function($is_sub){
+            return $is_sub?'已订阅':'未订阅';
+        })->sortable();
+        $grid->column('created_at', __('创建时间'));
+
         $grid->disableCreateButton();
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableView();

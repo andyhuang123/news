@@ -3,33 +3,70 @@
 @section('content')
     <div class="container pt-5">
         <div class="title"> 
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="title">
-                    <h3>福利列表
-                        <br>
-                        <!--<small>折戟沉沙铁未销,自将磨洗认前朝。东风不与周郎便,铜雀春深锁二乔。--《赤壁》(唐/杜牧)</small>-->
-                    </h3>
+        </div> 
+        <div class="container">
+            <div class="title">
+                <h3>优惠券 <br> </h3>
+            </div>
+            <div class="container">
+                <div class="row"> 
+                @if(count($hotads))
+                    @foreach($hotads as $ad)
+                        <div class="col-sm-4"> 
+                                <div class="card">
+                                    <div class="card-body"> 
+                                        <div class="media mt-2">
+                                        <div class="media-left media-middle mr-2 ml-1">
+                                            <a class="media mt-2" href="{{$ad->click_url}}" target="_blank">
+                                            <img src="{{$ad->pict_url}}" width="120px" height="120px" class="media-object">
+                                            </a>
+                                        </div>
+                                        <div class="media-body"> 
+                                            <small class="media-heading text-secondary" style="font-size: 1em;">
+                                                <h6 class="card-title" style="font-size:14px"><i class="nc-icon nc-planet" aria-hidden="true"></i> {{$ad->short_title}}</h6>
+                                                @if(isset($ad->coupon_click_url)) 
+                                                    <div style="margin-top:15px">
+                                                        <a href="{{$ad->coupon_click_url }}"  title="{{$ad->title}}" target="_blank">
+                                                            <span class="label label-danger" style="font-size: 18px;border-radius: 5px;">
+                                                            立即领取      ¥{{$ad->coupon_amount}}券
+                                                            </span>
+                                                        </a> 
+                                                    </div> 
+                                                    <div style="margin-top:20px">
+                                                        <a href="{{$ad->click_url }}"  title="{{$ad->title}}" target="_blank">
+                                                            <span class="label label-danger" style="font-size: 18px;border-radius: 5px;">
+                                                            点击购买
+                                                            </span>
+                                                        </a> 
+                                                    </div> 
+
+                                                @else
+                                                    <h4>
+                                                        <a href="{{$ad->click_url }}"  title="{{$ad->title}}" target="_blank">
+                                                            <span class="label label-danger" style="font-size: 18px;border-radius: 5px;">
+                                                            点击购买
+                                                            </span>
+                                                        </a> 
+                                                    </h4> 
+                                                @endif
+                                            
+                                            </small> 
+                                        </div>  
+                                        </div>
+                                </div>     
+                            </div>     
+                        </div>                   
+                    @endforeach    
+                  @else
+                     <div class="empty-block">暂无数据 ~_~ </div>
+                  @endif 
                 </div>
             </div>
         </div>
-        <div class="row">  
-              @foreach($list as $vo)
-               <div class="col-sm-3">
-                    <div class="card mb-3">  
-                              <a href="{{$vo->href}}" target="_blank">
-                              <img src="http://www.seedblog.cn/uploads/{{$vo->img_url}}" alt="{{$vo->title}}" width="100%"> 
-                              </a>
-                    </div>
-               </div> 
-              @endforeach
-             
-        </div>
+       
         <!--分页开始-->
         <div class="pagination-area">
-               {{$list->onEachSide(1)->links('vendor.pagination.default')}}
-      
+               
         </div>
     </div>
 @endsection

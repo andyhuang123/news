@@ -39,27 +39,38 @@ class BlogNavArticleController extends AdminController
     protected function grid($nav_name)
     {
         $grid = new Grid(new BlogNavArticle);
-        $grid->model()->orderBy('article_sort', 'desc')->orderBy('id', 'desc');
+        // ORDER BY flag DESC,top DESC,id DESC
+        $grid->model()->orderBy('article_sort', 'desc')->orderBy('is_top', 'desc')->orderBy('id','desc');
         $grid->column('id', 'ID');
         $grid->column('nav_id', '所属导航')->display(function ($nav_id) use ($nav_name) {
             return $nav_name[$nav_id];
         });
         $grid->column('tag', '标识');
         $grid->column('article_title', '文章标题')->editable();
+        
         $grid->column('article_tag', '文章标签')->display(function ($article_tag) {
             $article_tag = empty($article_tag) ? '' : explode(',', $article_tag);
             return $article_tag;
         })->label('success');
+
         
         $grid->column('article_click', '点击量')->sortable();
          
         $shows = [
-            'on'  => ['value' => 1, 'text' => '显示', 'color' => 'primary'],
-            'off' => ['value' => 2, 'text' => '隐藏', 'color' => 'default'],
+            'on'  => ['value' => 1, 'text' => '显示', 'color' => 'success'],
+            'off' => ['value' => 2, 'text' => '隐藏', 'color' => 'danger'],
         ];
         $grid->column('article_show','是否显示')->switch($shows);
         
         $grid->column('article_sort', '文章排序')->editable();
+
+         
+        $states = [
+            'on'  => ['value' => 1, 'text' => '置顶', 'color' => 'success'],
+            'off' => ['value' => 0, 'text' => '不置顶', 'color' => 'danger'],
+        ];
+        $grid->column('is_top','是否置顶')->switch($states);
+ 
         $grid->filter(function ($filter) use ($nav_name) {
             $filter->equal('nav_id', '所属导航')->select($nav_name);
             $filter->like('article_title', '文章标题');
@@ -117,7 +128,7 @@ class BlogNavArticleController extends AdminController
         
         $form->number('article_sort', '文章排序')->default(100)->rules('integer|between:0,999999');
        
-        $form->radioButton('tag', '标识')->options(['blog' => '博客', 'ad'=> '广告'])->default('blog');
+        $form->radioButton('tag', '标识')->options(['blog' => '博客', 'ad'=> '广告','news'=>'新闻'])->default('blog');
         
         $form->text('tag_url', '广告地址');
         
@@ -129,6 +140,13 @@ class BlogNavArticleController extends AdminController
         ];
         
         $form->switch('article_show', '是否显示')->states($states)->default(1);
+        
+        $istop = [
+            'on'  => ['value' => 1, 'text' => '置顶', 'color' => 'info'],
+            'off' => ['value' => 0, 'text' => '不置顶', 'color' => 'danger'],
+        ];
+        
+        $form->switch('is_top', '是否置顶')->states($istop)->default(0);
         
         
         return $form;

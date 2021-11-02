@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'Laravel-admin',
+    'name' => '编码会馆',
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>Laravel</b> admin',
+    'logo' => '<b>编码</b> 会馆',
 
     /*
     |--------------------------------------------------------------------------
@@ -209,7 +209,7 @@ return [
     */
     'operation_log' => [
 
-        'enable' => true,
+        'enable' => false,
 
         /*
          * Only logging allowed methods in the list
@@ -289,7 +289,7 @@ return [
     | "sidebar-mini".
     |
     */
-    'layout' => ['sidebar-mini', 'sidebar-collapse'],
+    'layout' => ['sidebar-mini'],
 
     /*
     |--------------------------------------------------------------------------
@@ -446,6 +446,19 @@ return [
                 'pasteImage' => true,//允许粘贴图片
                 'cleanPaste' => false,
             ]
+        ],
+        'grid-lightbox' => [
+            'enable' => true,
+        ],
+        'cropper' => [
+        
+            // 如果要关掉这个扩展，设置为false
+            'enable' => true,
+        ],
+        'chartjs' => [
+        
+            // Set to `false` if you want to disable this extension
+            'enable' => true,
         ]
     ],
 ];

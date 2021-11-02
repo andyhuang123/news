@@ -5,6 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
 <body>
-{{$configs['base.website_title']}}最新文章更新：<a href="{{$url}}" target="_blank">{{$title}}</a>
+
+{{$configs['base.website_title']}}最新文章更新： <a href="{{$url}}" target="_blank">{{$title}}</a>
+ 
+<div class="card">
+       {{$show_desc}}
+</div>
+ 
 </body>
 </html>

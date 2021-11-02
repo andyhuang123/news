@@ -1,14 +1,108 @@
 @extends('home.main')
 @section('title','关于我')
 @section('content')
+<style>
+    .card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px 12px 12px 12px;
+    }
+    .ui.green.label, .ui.green.labels .label {
+        background-color: #21ba45!important;
+        border-color: #21ba45!important;
+        color: #fff!important;   
+    }
+    
+    .ui.red.label, .ui.red.labels .label {
+        background-color: #ff0000!important;
+        border-color: #ff0000!important;
+        color: #fff!important;   
+    }
+    
+    .nav-pills .nav-item .nav-link {
+            border: 0px solid #66615B;  
+            border-radius: 0;
+            color: #66615B;
+            font-weight: 100;
+            margin-left: -1px;
+            padding: 5px; 
+    }
+    .nav-pills .nav-item:last-child .nav-link {
+        border-radius: 0 0px 0px 0 !important;
+    }
+    .nav-pills .nav-item:first-child .nav-link {
+        border-radius: 0px 0 0 0px !important;
+        margin: 0;
+    }
+    .nav-pills .nav-item .nav-link.active { 
+        background-color: #85daaa !important;
+        color: #101010!important;
+    }
+    .fa, .fas {
+        font-weight: 900;
+    }
+    .fa, .far, .fas {
+        font-family: "Font Awesome 5 Free";
+    }
+    .fa, .fab, .fad, .fal, .far, .fas {
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        line-height: 1;
+    }
+    .card-announcement-animation {
+        color: #f00;
+        -webkit-animation: announ_animation 0.8s linear infinite;
+        -moz-animation: announ_animation 0.8s linear infinite;
+        -o-animation: announ_animation 0.8s linear infinite;
+        -ms-animation: announ_animation 0.8s linear infinite;
+        animation: announ_animation 0.8s linear infinite;
+    }
+    .card .carousel .carousel-inner a {
+        position: unset;  
+        color: #FFFFFF !important;
+    } 
+    .card .carousel .carousel-control-next, .carousel-control-prev {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        width: 15%;
+        color: #fff;
+        text-align: center;
+        opacity: .5;
+        transition: opacity .15s ease;
+    }
+    .card .carousel .carousel-control-next, .carousel-control-prev {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        width: 15%;
+        color: #fff;
+        text-align: center;
+        opacity: .5;
+        transition: opacity .15s ease;
+    }
+</style>
     <div class="container pt-5">
-         <div class="title"> 
-            <!--<blockquote class="blockquote text-right">-->
-            <!--    <p class="mb-0"> </p>-->
-            <!--    <footer class="blockquote-footer"> -->
-            <!--        <cite title="Source Title"> </cite>-->
-            <!--    </footer>-->
-            <!--</blockquote>-->
+        <div class="title"> 
+            <!-- <blockquote class="blockquote text-right"></blockquote>  -->
         </div> 
         <div class="row">
             <div class="col-sm-3">
@@ -38,6 +132,56 @@
                         <a href="javascript:void(0);" class="btn btn-just-icon btn-outline-success" data-html="true" data-toggle="tooltip" data-placement="top" data-clipboard-action="copy" data-clipboard-text="{{$configs['user_info.user_wechat']}}" id="copy_wx">
                             <i class="fa fa-wechat" aria-hidden="true" data-clipboard-action="copy" data-clipboard-target="#copy_wx"></i>
                         </a>
+                        <a href="https://github.com/andyhuang123" class="btn btn-just-icon btn-outline-success" data-html="true" data-toggle="tooltip" data-placement="top">
+                             <i class="fa fa-github fa-fw" aria-hidden="true"></i>
+                        </a> 
+                        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=t4SCgYSHh4KDgffGxpnU2No" style="text-decoration:none;">
+                        <img src="http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_22.png"/></a>
+                    </div>
+                </div>
+                 
+                <div class="card">
+                       <div class="card-body"> 
+                        <div id="demo" class="carousel slide" data-ride="carousel"> 
+                            <!-- 指示符 -->
+                            <ul class="carousel-indicators">
+                                @if(count($ads))
+                                    @foreach ($ads as $key=>$ad) 
+                                    <li data-target="#demo" data-slide-to="{{$key}}"  @if($key==0) class="active" @endif></li> 
+                                    @endforeach
+                                @else
+                                <li data-target="#demo" data-slide-to="0"  class="active"></li> 
+                                @endif     
+                            </ul>
+
+                            <!-- 轮播图片 -->
+                            <div class="carousel-inner">
+                            @if(count($ads))
+                                @foreach ($ads as $key=>$ad) 
+                                    <div class="carousel-item @if($key==0)active @endif"> 
+                                        <a href="{{$ad->click_url}}"  target="_blank">
+                                        <img src="{{$ad->pict_url}}">  
+                                        </a>
+                                        <div class="carousel-caption">
+                                        <h3></h3> 
+                                        <p></p> 
+                                        </div>
+                                    </div> 
+                                    @endforeach
+                                @else
+                                <div class="empty-block">暂无数据 ~_~ </div>
+                                @endif
+                            </div>
+
+                            <!-- 左右切换按钮 -->
+                            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#demo" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            </a>
+
+                            </div>
                     </div>
                 </div>
             </div>

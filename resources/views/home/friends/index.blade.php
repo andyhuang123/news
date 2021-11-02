@@ -7,21 +7,12 @@
         }
     </style>
     <div class="container pt-5">
-        <div class="title">
-            <!--<blockquote class="blockquote text-right">-->
-            <!--    <p class="mb-0">送客南昌尉，离亭西候春。野花看欲尽，林鸟听犹新。别酒青门路，归轩白马津。相知无远近，万里尚为邻。</p>-->
-            <!--    <footer class="blockquote-footer">《送韦城李少府》-->
-            <!--        <cite title="Source Title">张九龄</cite>-->
-            <!--    </footer>-->
-            <!--</blockquote>-->
+        <div class="title"> 
         </div>
     </div>
     <div class="container">
         <div class="title">
-            <h3>
-                提交友链<br>
-                <!--<small>人生得意须尽欢，莫使金樽空对月。天生我材必有用，千金散尽还复来。--《将进酒》(李白)</small>-->
-            </h3>
+            <h3> 提交友链<br></h3>
         </div>
         <div class="row">
             <div class="col-sm-4" style="margin-bottom: 5px;">
@@ -59,10 +50,7 @@
     </div>
     <div class="container">
         <div class="title">
-            <h3>博主推荐
-                <br>
-                <!--<small>十年磨一剑,霜刃未曾试。今日把示君，谁有不平事。--《剑客·述剑》(贾岛)</small>-->
-            </h3>
+            <h3>博主推荐 <br> </h3>
         </div>
         <div class="container">
             <div class="row">
@@ -76,8 +64,7 @@
                               <a href="{{$vo->friends_link}}" class="card-link" target="_blank">链接</a>
                             </div>
                           </div> 
-                    </div>  
-                   
+                    </div>   
                 @endforeach
             </div>
         </div>

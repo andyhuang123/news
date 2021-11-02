@@ -1,9 +1,11 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
- 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\BlogNavArticle;
+
 class BlogMessage extends Model
 {
     protected $table = 'blog_message';
@@ -19,13 +21,23 @@ class BlogMessage extends Model
 
     /**
      * 这个评论的子评论
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *  @return HasMany
      */
-    public function replies()
+    public function replys()
     {
-        return $this->hasMany(BlogMessage::class, 'parent_id');
+        return $this->hasMany(BlogMessage::class, 'parent_id')->orderBy('id', 'desc');
     } 
+
+     /**
+     * @return BelongsTo
+     */
+    public function navarticle(): BelongsTo
+    {
+        return $this->belongsTo(BlogNavArticle::class, 'id','foreign_id');
+    }
     
+ 
+
     public function getColumnNameAttribute($value)
     {
         return array_values(json_decode($value, true) ?: []);

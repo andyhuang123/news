@@ -55,6 +55,26 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null, 
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [PDO::ATTR_PERSISTENT => true],
+          
+         ],
+         'mysql_extend' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_EXREND', '127.0.0.1'),
+            'port' => env('DB_PORT_EXREND', '3306'),
+            'database' => env('DB_DATABASE_EXREND', 'forge'),
+            'username' => env('DB_USERNAME_EXREND', 'forge'),
+            'password' => env('DB_PASSWORD_EXREND', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
             'strict' => true,
             'engine' => null, 
             'options' => extension_loaded('pdo_mysql') ? array_filter([
@@ -131,6 +151,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_DB', 0),
+            'persistent' => true, // 开启持久连接
         ],
 
         'cache' => [

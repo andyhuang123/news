@@ -1,5 +1,5 @@
-<?php
-
+<?php 
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,57 +23,52 @@ Route::get('topics/{topic}/{slug?}', 'TopicsController@show')->name('topics.show
 Route::resource('replies', 'RepliesController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
 
 Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]);
-
+//消息提醒
 Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
-
- 
+//github登录
 Route::get('login/github', 'LoginController@redirectToProvider')->name('github.login');
-
+//github回调
 Route::get('oauth/redirect', 'LoginController@handleProviderCallback')->name('github.callback');
 
-// Route::namespace('Auth')->prefix('auth')->group(function (){
-//     Route::get('github','SocialitesController@github');
-//     Route::get('callback','SocialitesController@callback');
-// });
-Route::get('blog', 'BlogController@index')->name('blog.index');
+#tool工具api
+Route::match(['get', 'post'],'api/douyin_url', 'HomeController@getdouyinvideo')->name('douyin.url');
+ 
+Route::match(['get', 'post'],'api/settingsurl', 'HomeController@getAdsetting')->name('douyin.adurl');
+ 
+Route::post('api/aiui', 'HomeController@getaicontent')->name('aiui');
 
-Route::get('show/{id}', 'BlogController@show')->name('blog.show');
+Route::post('api/elmdata', 'HomeController@getelmdata')->name('elmdata'); //活动接口
 
+Route::post('api/activitylist', 'HomeController@gethuodonglist')->name('elmdata.list'); //活动列表
+
+Route::any('api/hello', 'HomeController@gethello')->name('api.hello'); //回调URL
+
+Route::get('jd_activity_list', 'JdController@jdactivtylist')->name('jd.jdactivtylist');//jd联盟活动列表
+//优惠券
+Route::post('search/all', 'CouponController@getCoupon')->name('coupon');
+//淘口令
+Route::post('tpwd/create', 'CouponController@getpassword')->name('tpwd');
+//获取链接
 Route::get('newlist','HomeController@getlist')->name('newlist');
-
+//登录
 Route::match(['get', 'post'], '/login', 'LoginController@index')->name('login');
-
+//注册
 Route::match(['get', 'post'], '/register', 'LoginController@register')->name('register');
-
+//退出
 Route::post('/logout', 'LoginController@logout')->name('logout');
-
-Route::get('/roomlogout', 'LoungeController@logout')->name('roomlogout');
-
-//广告
-
-//Route::get('taobao', 'Taobao@wuliao')->name('taobao.ads'); //淘宝客 综合热销
  
-Route::group(['middleware' => ['checklogin']], function () {
-    Route::get('/lounge', 'LoungeController@index');
-    Route::match(['get', 'post'], '/create', 'LoungeController@create');
-    Route::get('/room/{id}', 'RoomController@index');
-    Route::post('/bind', 'RoomController@bind');
-    Route::post('/say', 'RoomController@say');
-    Route::post('/flush', 'RoomController@flush');
-    Route::get('/leave', 'RoomController@leave');
-    Route::post('/music', 'RoomController@music');
-    //用户中心
-    Route::get('/center', 'UsersController@index')->name('center');
-    
-});
+//导航
+Route::get('/nav', 'NavController@index')->name('nav');
+//爬虫 
+Route::get('paspider', 'SpiderController@flushOnce')->name('spider.once'); 
  
  
+
 //配置网站前台路由规则
 Route::middleware(['laravel_pjax'])->name('home.')->group(function (){
-    //Route::get('/','Home\IndexController@index')->name('index');
+ 
     Route::get('/','Home\ArticleController@index')->name('index'); 
     Route::match(['get','post'],'article/{nav_id?}','Home\ArticleController@index')->name('article'); 
-     
      
     Route::get('about','Home\AboutController@index')->name('about');
     Route::get('friends','Home\FriendsController@index')->name('friends');
@@ -91,23 +86,22 @@ Route::middleware(['laravel_pjax'])->name('home.')->group(function (){
     Route::get('line','Home\LineController@index')->name('line');
     Route::get('good','Home\GoodController@index')->name('good');
     Route::get('laboratory','Home\Laboratory@index')->name('laboratory');
+    
+    Route::get('newindex/{nav_id?}','Home\VideoController@newindex')->name('new_video');
+
+    Route::get('center', 'UsersController@index')->middleware('checklogin')->name('center'); 
+      
 });
 
-
-  
+//留言
 Route::name('home.')->group(function(){
-    
-    // Route::group(['middleware' => ['checklogin']], function () { 
-    //   Route::post('message_msg','Home\MessageController@message_msg')->name('message_msg');
-    //   Route::post('article_msg','Home\ArticleDetailController@article_msg')->name('article_msg');
-    // });
+  
     Route::post('message_msg','Home\MessageController@message_msg')->name('message_msg');
     Route::post('video_msg','Home\VideoController@video_msg')->name('video_msg');
     Route::post('friends_store','Home\FriendsController@store')->name('friends_store');
     Route::post('subscribe','Home\ArticleController@subscribe')->name('subscribe');
     Route::post('article_msg','Home\ArticleDetailController@article_msg')->name('article_msg'); 
-    
-    
+     
     Route::middleware('throttle:60,1')->group(function () {
        Route::post('article_like','Home\ArticleDetailController@article_like')->name('article_like');
     });
@@ -117,5 +111,18 @@ Route::name('home.')->group(function(){
     Route::post('article_sub','Home\ArticleDetailController@article_sub')->name('article_sub');
   
 });
+
+
+// Wiki 首页
+Route::get('/wiki', 'WikiController@index');
+// 获取指定文档内容
+Route::get('wiki/content/{project_id}/{doc_id}', 'WikiController@getContent')
+    ->name('wiki.document.content')
+    ->where('project_id', '[0-9]+')
+    ->where('doc_id', '[0-9]+');
+// 文档列表展示
+Route::get('wiki/detail/{project_id}', 'WikiController@detail')
+    ->name('wiki.document.detail')
+    ->where('project_id', '[0-9]+');
  
  

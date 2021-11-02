@@ -4,6 +4,12 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('css/login.css') }}">
+<style>
+    .fa {
+        width: auto;
+        text-align: center;
+    }
+</style>
 @endsection
 
 @section('body')
@@ -18,7 +24,7 @@
 </nav>
 <!-- end navbar -->
 
-<div class="wrapper">
+<div class="container">
     <!-- you can use the class main-raised if you want the main area to be as a page with shadows -->
     <div class="main">
         <div class="container">

@@ -87,6 +87,7 @@ class BlogNavPhotoController extends AdminController
         $form = new Form(new BlogNavPhoto);
         $form->select('nav_id', '所属导航')->options($this->nav_name)->rules('required|integer');
         $form->text('photo_title', '相册标题')->required()->attribute('autocomplete', 'off')->rules('required|max:40');
+        $form->editormd('photo_desc', '相册描述')->required();
         $form->image('photo_img', '相册封面')->uniqueName()->attribute('accept', 'image/*')->required()->rules('required');
         $form->tags('photo_tag', '相册标签')->help('建议使用标签总数量不超过6个');
         $form->number('photo_click', '点击量')->default(0)->rules('required|integer|between:0,999999');
@@ -96,7 +97,7 @@ class BlogNavPhotoController extends AdminController
             'off' => ['value' => 2, 'text' => '隐藏', 'color' => 'danger'],
         ];
         $form->switch('photo_show', '是否显示')->states($states)->default(1);
-        $form->multipleImage('photo_json', '所属照片')->uniqueName()->attribute('accept', 'image/*')->removable()->sortable()->rules('required');
+        $form->multipleImage('photo_json', '所属照片')->uniqueName()->attribute('accept', 'image/*')->removable()->sortable();
         return $form;
     }
 }

@@ -1,76 +1,83 @@
 @extends('home.main')
+
 @section('title','视频列表')
+
+@push('scripts') 
+<link rel="stylesheet" href="{{asset(__STATIC_HOME__)}}/assets/video_theam/css/style.css">
+<link href="{{asset(__STATIC_HOME__)}}/assets/video_theam/owl-carousel/owl.carousel.css" rel="stylesheet">
+<link href="{{asset(__STATIC_HOME__)}}/assets/video_theam/owl-carousel/owl.theme.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{asset(__STATIC_HOME__)}}/assets/video_theam/jquery/font-awesome.4.6.0.css">
+<style>
+    .zoom-container a {
+        display: block;
+        position: absolute;
+        top: -100%;
+        opacity: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        text-align: center !important;
+        color: inherit;
+    }
+    .fa { 
+        width: auto;
+        text-align: center;
+    }
+    .card .card-text {
+        font-size: 15px;
+        color: #66615b;
+        padding-bottom: 0px;
+        padding-top: 10px;
+    }
+</style> 
+@endpush 
+
 @section('content')
-    <div class="container pt-5">
-        <div class="title"> 
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="title">
-                    <h3>视频列表</h3>
-                </div>
+
+<div class="container pt-5"> 
+    <div class="title"> </div>   
+     <div class="row">
+        <div class="col-lg-12">
+            <div class="breadcrumb-trail breadcrumbs">
+                <ul class="trail-items breadcrumb" style="background-color: #ffff;">
+                    <li class="trail-item trail-begin"><a href="/"><i class="fa fa-home" aria-hidden="true"></i>首页 >> </a></li> 
+                    <li class="trail-item trail-end active">视频列表 </li>
+                </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-8">
-                <div class="card page-carousel">
-                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            @foreach ($recommended_video as $k=>$v)
-                            <li data-target="#carouselExampleIndicators" data-slide-to="{{$k}}" @if($k == 0)class="active" @endif ></li>
-                            @endforeach
-                        </ol>
-                        <div class="carousel-inner" role="listbox">
-                            @foreach ($recommended_video as $k=>$v)
-                            <div class="carousel-item  @if($k == 0)active @endif > ">
-                                <img class="d-block img-fluid" src="/uploads/{{$v->video_img}}" alt="{{$v->video_title}}">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <p>{{$v->video_title}}</p>
-                                </div>
-                            </div>
-                            @endforeach
+    </div>
+    <div class="container">  
+            <div class="row row-cols-1 row-cols-md-3">
+            @foreach($video_result as $v) 
+                <div class="col-sm-3"> 
+                    <div class="card"> 
+                        <img src="/uploads/{{$v->video_img}}" class="card-img-top" alt="{{$v->video_title}}" style="position:absolute;opacity: 0.7;z-index:0">
+                        <div class="card-body" style="z-index: 999;">
+                            <a href="{{url('video_details',['vid'=>$v->id])}}"> 
+                                <h5 class="card-title" style="color:#fdf7e6;">{{$v->video_title}}</h5>
+                            </a> 
+                            <p class="card-text">  
+                                <a class="text-secondary" href="{{url('video_details',['vid'=>$v->id])}}" title="{{$v->video_title}}">
+                                    <i class="far fa-user"></i> adminer
+                                </a> 
+                                </p>
                         </div>
-                        <a class="left carousel-control carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                            <span class="fa fa-angle-left"></span>
-                            <span class="sr-only">上一个</span>
-                        </a>
-                        <a class="right carousel-control carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                            <span class="fa fa-angle-right"></span>
-                            <span class="sr-only">下一个</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <p class="bd-lead">精选推荐</p>
-                <div class="list-group">
-                    @foreach ($recommended_video as $k=>$v)
-                        <a href="{{url('video_details',['vid'=>$v->id])}}" class="list-group-item list-group-item-action list-group-item-light">
-                            <span class="badge badge-pill badge-primary">{{$k+1}}</span>{{$v->video_title}}
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-        <div class="row mt-3">
-            @foreach($video_result as $v)
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="video-img" data-background="image" style="background-image: url('/uploads/{{$v->video_img}}');"></div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{$v->video_title}}</h5>
-                            <hr>
-                            <div class="card-footer text-center">
-                                <a href="{{url('video_details',['vid'=>$v->id])}}" class="btn btn-sm btn-success btn-round">
-                                    <i class="far fa-play-circle" aria-hidden="true"></i>
-                                    播放视频
-                                </a>
-                            </div>
+                        <div class="card-footer text-center" style="z-index: 999;">
+                            <a href="{{url('video_details',['vid'=>$v->id])}}">
+                                <i class="far fa-play-circle" aria-hidden="true" style="font-size: 3.8rem;color: #0dc55b;"></i>
+                            </a> 
+                        </div>
+                        <div class="card-footer" style="z-index: 999;">
+                            <i class="far fa-clock"></i>
+                                <small class="text-muted">{{$v->created_at->diffForHumans()}}</small>
+                                <span> • </span> 
+                                <i class="fa fa-eye"></i> {{$v->video_click}}
                         </div>
                     </div>
-                </div>
+                </div> 
             @endforeach
-        </div>
+            
+        </div> 
         <div class="row">
             <div class="col-sm-12">
                 <div class="pagination-area">
@@ -78,5 +85,25 @@
                 </div>
             </div>
         </div>
+                    
+               
+      
     </div>
+</div>
+
 @endsection
+
+@push('backend-register-js')
+<script src="{{asset(__STATIC_HOME__)}}/assets/video_theam/owl-carousel/owl.carousel.js"></script>
+<script>
+    $(document).ready(function() {
+      $("#owl-demo").owlCarousel({
+        autoPlay: 3000,
+        items : 5,
+        itemsDesktop : [1199,4],
+        itemsDesktopSmall : [979,4]
+      });
+
+    });
+  </script>
+@endpush

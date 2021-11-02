@@ -1,5 +1,6 @@
 <?php
 define("__STATIC_HOME__","/static/home");
+define("__STATIC_SHOP__","/static/shop");
 define("__STATIC_UPLOADS__","/uploads");
 /**
  * Desc:处理文件是本地上传还是七牛云上传的路径
@@ -108,3 +109,55 @@ function model_plural_name($model)
     // 获取子串的复数形式，例如：传参 `user` 会得到 `users`
     return Str::plural($snake_case_name);
 }
+/**
+ * 日历从星期日开始，通过确定每月第一天所在的星期，计算前后日期。
+ *
+ * @param Request $request
+ * @return void
+ */
+function calendar(Request $request)
+{
+    //获取年
+    $year = $request->input('year', now()->year);
+    //获取月份
+    $month     = $request->input('month', now()->month);
+    $yearMonth = sprintf("%d-%s", $year, $month);
+    //获取月份第一天所在的星期
+    $firstDayOfWeek = Carbon::parse("$yearMonth-01")->dayOfWeek;
+
+    //补全
+    $day      = 0;
+    $calendar = [];
+    for ($i = 0; $i < 6; $i++) {
+        for ($j = 0; $j < 7; $j++) {
+            if ($firstDayOfWeek != 0 and $i == 0) {
+                //根据月初第一天所在的星期，计算出之前几天的日子
+                $day  = Carbon::parse("$yearMonth-01")->subDays($firstDayOfWeek - $j)->day;
+                $date = Carbon::parse("$yearMonth-01")->subDays($firstDayOfWeek - $j)->format("Y-m-d");
+            } else {
+                $day++;
+                $date = Carbon::parse("$yearMonth-01")->addDays($day - 1)->format("Y-m-d");
+            }
+            $calendar[$i][] = $date;
+        }
+    }
+
+    return $calendar;
+} 
+/**
+ * 将$data 插入关联数组 $array 的键名为 $key 的 Key 之前
+ */
+function wpjam_array_push($array, $data=null, $key=false){
+    $data  = (array)$data;
+    $offset  = ($key===false)?false:array_search($key, array_keys($array));
+    $offset  = ($offset)?$offset:false;
+    if($offset){
+      return array_merge(
+        array_slice($array, 0, $offset),
+        $data,
+        array_slice($array, $offset)
+      );
+    }else{  // 没指定 $key 或者找不到，就直接加到末尾
+      return array_merge($array, $data);
+    }
+  }

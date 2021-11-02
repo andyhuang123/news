@@ -34,10 +34,7 @@ class BlogNavArticleObserver
                 $tagModel->a_id = $a_id;
                 $tagModel->save();
             } 
-        }
-        
-        Log::info('blogNavArticle created info.', ['info' => $blogNavArticle]);
-        
+        } 
         $email_list = BlogSubscribe::where('is_pass',2)->pluck('email');   
         
         foreach ($email_list as $k => $v){

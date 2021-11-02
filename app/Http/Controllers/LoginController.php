@@ -30,10 +30,12 @@ class LoginController extends Controller
 
             // 过滤
             Validator::make($input, [
-                'username'   => ['required', 'max:20'],
-                'password'   => ['required', 'max:40'],
+                'username'   => ['required'],
+                'password'   => ['required'],
             ])->validate();
-            
+
+            // $ss = Auth::guard('web')->attempt(['username'=>$input['username'],'password'=>$input['password']]);
+            // dd($ss);
             // 校验
             $user = User::where('username', $input['username'])->first();
             if (!$user) {

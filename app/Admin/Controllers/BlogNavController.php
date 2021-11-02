@@ -161,8 +161,11 @@ class BlogNavController extends AdminController
                 '5' => 'card1',
                 '6' => 'card2',
             ];
-            $blog_nav->nav_route = $route_home[$form->nav_type];
-            $blog_nav->save();
+            if($form->nav_type){
+                $blog_nav->nav_route = $route_home[$form->nav_type];
+                $blog_nav->save();
+            } 
+           
         });
 
         return $form;

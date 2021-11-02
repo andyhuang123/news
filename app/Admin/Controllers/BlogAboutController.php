@@ -43,7 +43,14 @@ class BlogAboutController extends AdminController
         $grid->column('about_title', __('关于标题'))->editable();
         $grid->column('about_type', __('关于类型'))->using($this->options);
         $grid->column('about_sort', __('关于排序'));
-        $grid->column('about_show', __('是否显示'))->using([1 => '显示', 2 => '隐藏']);
+        
+        // 设置text、color、和存储值
+        $states = [
+            'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+            'off' => ['value' => 2, 'text' => '关闭', 'color' => 'danger'],
+        ];
+        $grid->column('about_show','是否显示')->switch($states);
+   
         $grid->column('created_at', __('添加时间'));
 
         return $grid;
@@ -80,6 +87,7 @@ class BlogAboutController extends AdminController
             'off' => ['value' => 2, 'text' => '隐藏', 'color' => 'danger'],
         ];
         $form->switch('about_show', __('是否显示'))->states($states)->default(1);
+
         $form->textarea('about_describe', '关于描述');
 
         return $form;

@@ -20,10 +20,14 @@ class LineController extends Controller
         $show_article = $article_model::where('article_show', 1)->orderBy('id', 'desc')->paginate(15);
         //ads 
         $page = rand(1,5); 
-        $tabo = new TaobaoService;
-        $ads = $tabo->getwuliaomax($page,"4","13256");
         
-        return view('home.line.index',compact('show_article','ads'));
+        $tabo = new TaobaoService;
+
+        $ads = $tabo->getwuliaomax($page,"5","34616"); //淘抢购商品库 34616
+
+        $hotads = $tabo->hotwuliao($page,"18"); 
+        
+        return view('home.line.index',compact('show_article','ads','hotads'));
     }
 
    

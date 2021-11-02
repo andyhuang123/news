@@ -1,9 +1,42 @@
 @extends('home.main')
-@section('title','我的分享')
+@section('title',$nav->nav_title)
+@push('scripts')
+<link rel="stylesheet" href="{{asset(__STATIC_HOME__)}}/assets/video_theam/css/style.css">
+<link href="{{asset(__STATIC_HOME__)}}/assets/video_theam/owl-carousel/owl.carousel.css" rel="stylesheet">
+<link href="{{asset(__STATIC_HOME__)}}/assets/video_theam/owl-carousel/owl.theme.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{asset(__STATIC_HOME__)}}/assets/video_theam/jquery/font-awesome.4.6.0.css">
+@endpush
 @section('content')
+    <style>
+        .zoom-container a {
+            display: block;
+            position: absolute;
+            top: -100%;
+            opacity: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            text-align: center !important;
+            color: inherit;
+        }
+        .fa { 
+            width: auto;
+            text-align: center;
+        }
+    </style> 
     <div class="container pt-5">
         <div class="title"> 
-        </div>
+        </div> 
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-trail breadcrumbs">
+                        <ul class="trail-items breadcrumb" style="background-color: #ffff;">
+                            <li class="trail-item trail-begin"><a href="/"><i class="fa fa-home" aria-hidden="true"></i>首页 </a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+         </div>
         <div class="row">
             @foreach($result_list as $key => $v)
                 <div class="col-sm-3">
@@ -67,3 +100,17 @@
         </div>
     </div>
 @endsection
+@push('backend-register-js')
+<script src="{{asset(__STATIC_HOME__)}}/assets/video_theam/owl-carousel/owl.carousel.js"></script>
+<script>
+    $(document).ready(function() {
+      $("#owl-demo").owlCarousel({
+        autoPlay: 3000,
+        items : 5,
+        itemsDesktop : [1199,4],
+        itemsDesktopSmall : [979,4]
+      });
+
+    });
+    </script>
+@endpush

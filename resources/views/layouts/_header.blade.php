@@ -2,7 +2,7 @@
   <div class="container">
     <!-- Branding Image -->
     <a class="navbar-brand " href="{{ url('/') }}">
-      php漫游指南
+    <span style="font-size:16px;"><img src="/img/logo.svg" width="25px" height="25px"/></span> 编码会馆
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background-color: transparent;border-style: none;">
       <span class="navbar-toggler-icon"></span>
@@ -31,12 +31,12 @@
           </li> 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img src="{{ Auth::user()->avatar }}" class="img-responsive img-circle" width="30px" height="30px">
+              <img src="{{ Auth::user()->avatar }}" class="img-responsive img-circle" style="display: inherit;" width="30px" height="30px">
               {{ Auth::user()->username }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               
-              <a class="dropdown-item" href="{{ route('center') }}">
+              <a class="dropdown-item" href="/center">
                 <i class="far fa-user mr-2"></i>
                 个人中心
               </a> 

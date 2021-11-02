@@ -67,10 +67,8 @@ class AppServiceProvider extends ServiceProvider
         BlogNavShareOne::observe(BlogNavShareOneObserver::class);
         BlogNavShareTwo::observe(BlogNavShareTwoObserver::class);
         BlogFriends::observe(BlogFriendsObserver::class);
-        BlogAboutCardTwo::observe(BlogAboutCardTwoObserver::class);
-        
-        BlogNavArticle::observe(BlogNavArticleObserver::class);
-        
+        BlogAboutCardTwo::observe(BlogAboutCardTwoObserver::class); 
+        BlogNavArticle::observe(BlogNavArticleObserver::class); 
         ConfigModel::observe(BlogConfigObserver::class);
          
         \App\Models\User::observe(\App\Observers\UserObserver::class);
@@ -86,8 +84,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     public function system_nav()
-    {
-//        $collection = new Collection();
+    { 
         $top_data = DB::table('blog_nav')->where('nav_open', '=', 1)->where('nav_pid', '=', 0)->orderBy('nav_sort', 'asc')->get()->keyBy('id');
         $top_id   = $top_data->keys();
         $son_data = DB::table('blog_nav')->where('nav_open', '=', '1')->whereIn('nav_pid', $top_id)->orderBy('nav_sort', 'asc')->get();
@@ -98,22 +95,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     public function my_music()
-    {
-    //     $music_data  = Db::table('blog_nav_music')->select('id', 'music_json', 'music_img', 'music_title')->where('music_play', 1)->orderBy('music_sort', 'desc')->get();
-    //     $music_array = $music_data->toArray();
-    //     $music_list  = [];
-    //     foreach ($music_array as $k => $v) {
-    //         if ($v->music_json) {
-    //             $obj_data = json_decode($v->music_json);
-    //             foreach ($obj_data as $m) {
-    //                 $music_obj['title']  = str_replace('files/', '', $m);
-    //                 $music_obj['author'] = $v->music_title;
-    //                 $music_obj['url']    = processing_files($m);
-    //                 $music_obj['pic']    = processing_files($v->music_img);
-    //                 $music_list[]        = $music_obj;
-    //             }
-    //         }
-    //     }
+    { 
         $music_list = [];
         return json_encode($music_list);
     }

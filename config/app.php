@@ -170,6 +170,8 @@ return [
         HieuLe\Active\ActiveServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         Vanry\Scout\TNTSearchScoutServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
+     
         /*
          * Application Service Providers...
          */
@@ -177,14 +179,9 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        
+        App\Providers\RouteServiceProvider::class, 
         App\Providers\RepositoryServiceProvider::class,
-
-        //七牛云
-        zgldh\QiniuStorage\QiniuFilesystemServiceProvider::class,
-        
-        Mews\Captcha\CaptchaServiceProvider::class,
+  
 
     ],
 

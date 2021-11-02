@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <!--<title>@yield('title')</title>-->
-     <title>{{$configs['base.website_title']}}-@yield('title')</title>
+    <title>{{$configs['base.website_title']}}-@yield('title')</title>
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}">
     <!--<link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">-->
     <link rel="icon" type="image/png" href="{{processing_files($configs['base.website_icon'])}}">
@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css">
     <link rel="stylesheet" href="{{ asset('css/font-roboto.css') }}">
     <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+    <link href="{{asset(__STATIC_HOME__)}}/assets/css/paper-kit.css?v=2.2.0" rel="stylesheet" />
 
     <!-- CSS Files -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
@@ -37,6 +38,18 @@
             right: 0;
             left: 0;
             z-index: 1030;
+        }
+        .nav-pills .nav-item:first-child .nav-link {
+            border-radius: 0px 0 0 0px !important;
+            margin: 0;
+        }
+        .nav-pills .nav-item:last-child .nav-link {
+            border-radius: 0 0px 0px 0 !important;
+        }
+        .card img {
+            max-width: inherit !important;
+            height: auto;
+           border-radius: 30px;
         }
     </style>
 </head>

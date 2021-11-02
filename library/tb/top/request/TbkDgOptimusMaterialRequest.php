@@ -3,7 +3,7 @@
  * TOP API: taobao.tbk.dg.optimus.material request
  * 
  * @author auto create
- * @since 1.0, 2020.09.02
+ * @since 1.0, 2020.10.26
  */
 class TbkDgOptimusMaterialRequest
 {
